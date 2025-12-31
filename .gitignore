@@ -1,4 +1,4 @@
 .idea
 FinTrack.iml
 node_modules/
-src/.env
+.env
