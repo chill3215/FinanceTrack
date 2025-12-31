@@ -4,11 +4,12 @@ import plaidRoutes from "./routes/plaid.js";
 import dotenv from "dotenv";
 //Path ist relativ zur root gegeben
 dotenv.config({path: './.env'});
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT; // process.env ist ein Obj, das alle Umgebungsvariablen enthält
 
-
+app.use(cors());
 
 // Test route
 app.get("/", (req, res) =>{
