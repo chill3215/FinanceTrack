@@ -5,7 +5,8 @@ import express from 'express';
 import cors from "cors";
 //importiert damit die Verbindung initialisiert wird, danach benutze nur models
 import db from "./db";
-import plaidRoutes from "./routes/plaid.js";
+import plaidRoutes from "./routes/plaid.routes.js";
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
 const PORT = process.env.PORT; // process.env ist ein Obj, das alle Umgebungsvariablen enthält
@@ -18,6 +19,7 @@ app.get("/", (req, res) =>{
 })
 
 app.use(express.json());
+app.use("/auth", authRoutes);
 app.use("/plaid", plaidRoutes);
 
 app.listen(PORT, () => {
