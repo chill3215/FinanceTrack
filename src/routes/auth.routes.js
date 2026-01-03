@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt'
 import User from "../models/User";
 import {signToken} from "../auth/jwt";
+import passport from "passport";
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
@@ -32,6 +33,19 @@ router.post('/login', async (req, res) => {
 
     res.json({ token });
 });
+
+router.get('/google',
+    passport.authenticate('google', {scope: ['profile']})
+);
+
+router.get('/google/callback',
+    passport.authenticate('google', {session: 'false'}),
+    (req, res) => {
+        const token = signToken(req.user._id);
+        res.json({token });
+    }
+);
+
 
 export default router;
 

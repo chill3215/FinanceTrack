@@ -7,6 +7,7 @@ import cors from "cors";
 import db from "./db";
 import plaidRoutes from "./routes/plaid.routes.js";
 import authRoutes from "./routes/auth.routes";
+import passport from "passport";
 
 const app = express();
 const PORT = process.env.PORT; // process.env ist ein Obj, das alle Umgebungsvariablen enthält
@@ -19,6 +20,7 @@ app.get("/", (req, res) =>{
 })
 
 app.use(express.json());
+app.use(passport.initialize());
 app.use("/auth", authRoutes);
 app.use("/plaid", plaidRoutes);
 

@@ -8,7 +8,7 @@ export function signToken(userId) {
     );
 }
 
-export function authenticateToken(req, res, next) {
+export function authenticate(req, res, next) {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.sendStatus(401);
 
