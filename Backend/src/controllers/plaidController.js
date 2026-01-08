@@ -33,11 +33,12 @@ const exchangePublicToken = async (req, res) => {
             {
                 "client_id": process.env.PLAID_CLIENT_ID,
                 "secret": process.env.PLAID_SECRET,
-                "public_token": process.env.PLAID_TEMP_PUBLIC_TOKEN
+                "public_token": public_token
             },
             {headers: {'Content-Type': 'application/json'}}
         );
         res.json(response.data);
+        //access token has to be saved in db
     }
     catch (error) {
         console.log(error.response?.data || error.message);
