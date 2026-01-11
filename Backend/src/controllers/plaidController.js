@@ -1,4 +1,5 @@
 import axios from "axios";
+import User from "../models/User";
 
 const createLinkToken = async (req, res) => {
     try {
@@ -27,7 +28,8 @@ const createLinkToken = async (req, res) => {
 
 const exchangePublicToken = async (req, res) => {
     try {
-        const { public_token } = req.body;
+        const { public_token, institutionName } = req.body;
+
         const response = await axios.post(
             "https://sandbox.plaid.com/item/public_token/exchange",
             {
@@ -37,8 +39,21 @@ const exchangePublicToken = async (req, res) => {
             },
             {headers: {'Content-Type': 'application/json'}}
         );
-        res.json(response.data);
-        //access token has to be saved in db
+
+        const accessToken = res.data.access_token;
+        res.json({ success: true});
+
+        //accessToken in db speichern
+        const user = await User.findById(req.userId);
+        if (!user) {
+            res.status(404).json("User not found");
+        }
+        user.banks.push({
+            institutionName: institutionName || "Unknown bank",
+            accessToken: accessToken
+        });
+        await user.save();
+
     }
     catch (error) {
         console.log(error.response?.data || error.message);
