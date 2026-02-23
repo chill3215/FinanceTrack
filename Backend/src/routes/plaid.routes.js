@@ -1,5 +1,5 @@
 import express from "express";
-import plaidController from "../controllers/plaidController";
+import plaidController from "../controllers/plaid.controller";
 import {authenticate} from "../auth/jwt";
 const router = express.Router();
 

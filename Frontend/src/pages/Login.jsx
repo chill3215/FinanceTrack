@@ -1,6 +1,9 @@
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-function Login() {
+function Login({onLogin}) {
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -14,6 +17,8 @@ function Login() {
         const data = await res.json();
         localStorage.setItem("jwtToken", data.token);
         alert("login erfolgreich");
+        onLogin();
+        navigate("/main");
     }
 
     return (

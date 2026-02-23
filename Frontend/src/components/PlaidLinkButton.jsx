@@ -13,29 +13,42 @@ function PlaidLinkButton() {
 
             const data = await res.json();
             setLinkToken(data.link_token);
+            localStorage.setItem("linkToken", linkToken);
         }
         createLinkToken();
     }, [token]);
 
+    if (!linkToken) return <button disabled>Loading...</button>
+    return (
+        <PlaidLink linkToken={linkToken} token={token}/>
+    )
 
+}
+
+function PlaidLink({linkToken, token}) {
     const { open, ready } = usePlaidLink({
         token: linkToken,
-        onSuccess: async (public_token) => {
-            open();
+        onSuccess: async (public_token, metadata) => {
             await fetch("https://localhost:3000/plaid/exchange_public_token", {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}`},
-                body: JSON.stringify({public_token})
+                body: JSON.stringify({
+                    public_token,
+                    bank: {
+                        name: metadata.institution.name,
+                        institution_id: metadata.institution.institution_id
+                    }
+                })
             });
             alert("Connected to bank!");
         }
     })
+
     return (
         <button onClick={open} disabled={!ready || !linkToken}>
             Connect to banks
         </button>
     )
-
 }
 
 export default PlaidLinkButton;

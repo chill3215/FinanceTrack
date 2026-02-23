@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const bankSchema = new mongoose.Schema({
-    institutionName: String,
+    name: String,
+    institutionId: String,
     accessToken: String
 });
 
