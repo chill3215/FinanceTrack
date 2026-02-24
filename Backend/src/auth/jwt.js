@@ -10,13 +10,13 @@ export function signToken(userId) {
 
 export function authenticate(req, res, next) {
     const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.sendStatus(401);
+    if (!token) return res.sendStatus(401).body({message: "Token invalid"});
 
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         req.userId = payload.userId; //später verwenden für die Verarbeitung der Anfrage
         next();
     } catch (error){
-        return res.sendStatus(401);
+        return res.status(401).body({message: "Token invalid"});
     }
 }

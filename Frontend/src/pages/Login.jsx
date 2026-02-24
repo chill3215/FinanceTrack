@@ -15,10 +15,15 @@ function Login({onLogin}) {
         });
         //ließt json obj von Response body
         const data = await res.json();
-        localStorage.setItem("jwtToken", data.token);
-        alert("login erfolgreich");
-        onLogin();
-        navigate("/main");
+        if (res.status === 200) {
+            localStorage.setItem("jwtToken", data.token);
+            alert("login erfolgreich");
+            onLogin();
+            navigate("/main");
+        }
+        else{
+            alert(data.message);
+        }
     }
 
     return (

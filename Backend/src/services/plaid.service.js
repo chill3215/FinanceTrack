@@ -1,27 +1,27 @@
 import axios from "axios";
 import User from "../models/User";
 
-const createLinkToken = async () => {
-    const createLinkTokenResponse = await axios.post(
-        "https://sandbox.plaid.com/link/token/create",
-        {
-            "client_id": process.env.PLAID_CLIENT_ID,
-            "secret": process.env.PLAID_SECRET,
-            "client_name": "Insert Client name here",
-            "country_codes": ["US"],
-            "language": "en",
-            "user": {
-                "client_user_id": "user_good"
+    const createLinkToken = async () => {
+        const createLinkTokenResponse = await axios.post(
+            "https://sandbox.plaid.com/link/token/create",
+            {
+                "client_id": process.env.PLAID_CLIENT_ID,
+                "secret": process.env.PLAID_SECRET,
+                "client_name": "Insert Client name here",
+                "country_codes": ["US"],
+                "language": "en",
+                "user": {
+                    "client_user_id": "user_good"
+                },
+                "products": ["transactions"],
+                "additional_consented_products": ["auth"]
             },
-            "products": ["transactions"],
-            "additional_consented_products": ["auth"]
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-    )
-    return createLinkTokenResponse.data;
-}
+            { headers: { 'Content-Type': 'application/json' } }
+        )
+        return createLinkTokenResponse.data;
+    }
 
-const exchangePublicToken = async (public_token) => {
+const exchangePublicToken = async (public_token, bank, userId) => {
 
     const exchangeTokenResponse = await axios.post(
         "https://sandbox.plaid.com/item/public_token/exchange",
@@ -34,9 +34,9 @@ const exchangePublicToken = async (public_token) => {
     );
 
     //accessToken in db speichern
-    const user = await User.findById(req.userId);
+    const user = await User.findById(userId);
     if (!user) {
-        res.status(404).json("User not found");
+        throw new Error("User not found")
     }
     user.banks.push({
         name: bank.name || "Unknown bank",

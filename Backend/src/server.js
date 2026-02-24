@@ -7,11 +7,11 @@ import cors from "cors";
 import db from "./db";
 import rateLimit from "express-rate-limit";
 import plaidRoutes from "./routes/plaid.routes.js";
-import authRoutes from "./routes/auth.routes";
+import authRoutes from "./routes/auth.routes.js";
 import passport from "passport";
 
 const app = express();
-const PORT = process.env.PORT; // process.env ist ein Obj, das alle Umgebungsvariablen enthält
+const PORT = process.env.PORT || 3000; // process.env ist ein Obj, das alle Umgebungsvariablen enthält
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

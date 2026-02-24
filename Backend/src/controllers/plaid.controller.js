@@ -2,7 +2,7 @@ import plaidService from "../services/plaid.service";
 
 const createLinkToken = async (req, res) => {
     try {
-        const linkToken = plaidService.createLinkToken();
+        const linkToken = await plaidService.createLinkToken();
         res.json(linkToken);
     } catch (error){
         console.log(error.response?.data || error.message);
@@ -13,7 +13,7 @@ const createLinkToken = async (req, res) => {
 const exchangePublicToken = async (req, res) => {
     try {
         const { public_token, bank } = req.body;
-        await plaidService.exchangePublicToken(public_token, bank);
+        await plaidService.exchangePublicToken(public_token, bank, req.userId);
         res.json({ success: true});
     }
     catch (error) {

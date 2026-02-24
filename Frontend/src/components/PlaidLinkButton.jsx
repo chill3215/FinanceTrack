@@ -13,7 +13,7 @@ function PlaidLinkButton() {
 
             const data = await res.json();
             setLinkToken(data.link_token);
-            localStorage.setItem("linkToken", linkToken);
+            localStorage.setItem("linkToken", data.link_token);
         }
         createLinkToken();
     }, [token]);
@@ -29,9 +29,12 @@ function PlaidLink({linkToken, token}) {
     const { open, ready } = usePlaidLink({
         token: linkToken,
         onSuccess: async (public_token, metadata) => {
-            await fetch("https://localhost:3000/plaid/exchange_public_token", {
+            await fetch("http://localhost:3000/plaid/exchange_public_token", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}`},
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     public_token,
                     bank: {
