@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 const accountSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "User",
         required: true
     },
 
     bank: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Banks",
+        ref: "Bank",
         required: true
     },
 
@@ -20,10 +20,12 @@ const accountSchema = new mongoose.Schema({
 
     name: String,
 
-    balance: {
+    balances: {
         current: Number,
         isoCurrencyCode: String,
-    }
+    },
+    subtype: String,
+    type: String
 });
 accountSchema.index(
     { accountId: 1, bank: 1 },

@@ -1,5 +1,7 @@
 import axios from "axios";
 import User from "../models/User";
+import Bank from "../models/Bank"
+import accountService from "./account.service";
 
     const createLinkToken = async () => {
         const createLinkTokenResponse = await axios.post(
@@ -38,11 +40,15 @@ const exchangePublicToken = async (public_token, bank, userId) => {
     if (!user) {
         throw new Error("User not found")
     }
-    user.banks.push({
+
+    const newBank = await Bank.create({
+        user: userId,
         name: bank.name || "Unknown bank",
         institutionId: bank.institution_id,
-        accessToken: exchangeTokenResponse.data.access_token
+        accessToken: exchangeTokenResponse.data.access_token,
+        itemId: exchangeTokenResponse.data.item_id,
     });
-    await user.save();
+    await accountService.importAccounts(newBank._id);
+
 }
 export default { createLinkToken, exchangePublicToken };

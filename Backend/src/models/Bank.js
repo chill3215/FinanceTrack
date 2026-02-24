@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const bankSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "User",
         required: true
     },
     name: String,
@@ -11,4 +11,4 @@ const bankSchema = new mongoose.Schema({
     accessToken: String,
     itemId: String,
 });
-export default mongoose.model("Banks", bankSchema)
+export default mongoose.model("Bank", bankSchema)

@@ -1,0 +1,3 @@
+const importBankInformation = (req, res) => {
+
+}
