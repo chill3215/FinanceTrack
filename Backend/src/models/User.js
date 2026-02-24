@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 
-const bankSchema = new mongoose.Schema({
-    name: String,
-    institutionId: String,
-    accessToken: String
-});
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -20,8 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     googleId: {
         type: String,
-    },
-    banks: [bankSchema]
+    }
 })
 
 export default mongoose.model("Users", userSchema);
