@@ -1,3 +1,0 @@
-const importBankInformation = (req, res) => {
-
-}

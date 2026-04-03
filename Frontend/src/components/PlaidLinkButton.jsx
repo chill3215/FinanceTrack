@@ -29,7 +29,7 @@ function PlaidLink({linkToken, token}) {
     const { open, ready } = usePlaidLink({
         token: linkToken,
         onSuccess: async (public_token, metadata) => {
-            await fetch("http://localhost:3000/plaid/exchange_public_token", {
+            await fetch("http://localhost:3000/plaid/handle_bank_connection", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

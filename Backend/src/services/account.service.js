@@ -16,7 +16,7 @@ async function importAccounts(bankId) {
     for (const account of accounts) {
         await Account.findOneAndUpdate(
             {
-                accountId: account.accountId,
+                accountId: account.account_id,
                 bank: foundedBank._id,
             },
             {
@@ -25,7 +25,7 @@ async function importAccounts(bankId) {
             bank: foundedBank._id,
             balances: {
                 current: account.balances.current,
-                isoCurrencyCode: account.balances.isoCurrencyCode
+                isoCurrencyCode: account.balances.iso_currency_code,
             },
             name: account.name,
             subtype: account.subtype,
