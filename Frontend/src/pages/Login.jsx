@@ -69,9 +69,11 @@ export default function Login({ onLogin }) {
 
                         <div className="space-y-5">
                             <div className="space-y-2">
-                                <label className="text-sm font-semibold text-slate-700 ml-1">
-                                    Email Address
-                                </label>
+                                <div className="flex items-center justify-between ml-1">
+                                    <label className="text-sm font-semibold text-slate-700">
+                                        Email Address
+                                    </label>
+                                </div>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
                                         <Mail className="w-5 h-5" />
@@ -91,9 +93,6 @@ export default function Login({ onLogin }) {
                                     <label className="text-sm font-semibold text-slate-700">
                                         Password
                                     </label>
-                                    <button className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors">
-                                        Forgot password?
-                                    </button>
                                 </div>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
