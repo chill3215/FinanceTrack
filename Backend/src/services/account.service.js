@@ -39,4 +39,14 @@ async function importAccounts(bankId) {
     }
 }
 
-export default {importAccounts}
+async function getAllAccountsByBankId(bankId){
+    return Account.find({bank: bankId})
+        .select("_id balances name type")
+        .lean();
+}
+
+export default {
+    importAccounts,
+    getAllAccountsByBankId,
+
+}
