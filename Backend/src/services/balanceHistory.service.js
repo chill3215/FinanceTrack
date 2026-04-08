@@ -1,42 +1,50 @@
 import Account from "../models/Account";
 import Transaction from "../models/Transaction";
 import BalanceHistory from "../models/BalanceHistory";
+import mongoose from "mongoose";
 
 async function buildInitialHistoryForBank(bankId) {
-    const accounts = await Account.find({bank: bankId}).lean();
+    const accounts = await Account.find({bank: new mongoose.Types.ObjectId(bankId) }).lean();
 
     for (const account of accounts) {
-        const transactions = await Transaction.find({
-            account: account._id,
-        })
-            .sort({date: -1})
-            .select("date amount")
-            .lean();
+        try {
+            const transactions = await Transaction.find({
+                accountId: account.accountId,
+            })
+                .sort({date: -1})
+                .select("date amount")
+                .lean();
 
-        let runningBalance = account.balances.current;
+            let runningBalance = account.balances.current;
 
-        const monthlyMap = new Map();
+            const monthlyMap = new Map();
 
-        for (const transaction of transactions) {
-            const date = new Date(transaction.date);
+            for (const transaction of transactions) {
+                const date = new Date(transaction.date);
 
-            const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
+                const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
 
-            if (!monthlyMap.has(monthKey)) {
-                monthlyMap.set(monthKey, {
-                    account: account._id,
-                    date: new Date(date.getFullYear(), date.getMonth(), 1),
-                    balance: runningBalance,
-                });
+                if (!monthlyMap.has(monthKey)) {
+                    monthlyMap.set(monthKey, {
+                        account: new mongoose.Types.ObjectId(account._id),
+                        date: new Date(date.getFullYear(), date.getMonth(), 1),
+                        balance: runningBalance,
+                    });
+                }
+
+                runningBalance -= transaction.amount;
+                console.log(`running balance: ${runningBalance}`)
             }
 
-            runningBalance -= transaction.amount;
-        }
+            const history = Array.from(monthlyMap.values()).reverse();
+            console.log(history);
 
-        const history = Array.from(monthlyMap.values()).reverse();
-
-        if (history.length > 0) {
-            await BalanceHistory.insertMany(history);
+            if (history.length > 0) {
+                const result = await BalanceHistory.insertMany(history, { ordered: false });
+                console.log(`Inserted ${result.length} entries`);
+            }
+        } catch (error){
+            console.log(`History build for account ${account._id} failed`)
         }
     }
 }

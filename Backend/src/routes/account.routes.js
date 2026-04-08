@@ -5,8 +5,9 @@ import account from "../models/Account";
 
 const router = express.Router();
 
-router.get("/all_accounts/:bankId", authenticate, accountController.getAllAccounts);
+router.get("/all/:bankId", authenticate, accountController.getAllAccounts);
 
-router.get("/account/history/:bankId", authenticate, accountController.getAccountBalanceHistory)
+router.get("/history/:accountId", authenticate, accountController.getAccountBalanceHistory);
+
 
 export default router;

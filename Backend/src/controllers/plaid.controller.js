@@ -7,10 +7,10 @@ import balanceHistoryService from "../services/balanceHistory.service";
 const createLinkToken = async (req, res) => {
     try {
     const linkToken = await plaidService.createLinkToken();
-        res.json(linkToken);
+        return res.json(linkToken);
     } catch (error){
         console.log(error.response?.data || error.message);
-        res.status(500).json({ error: "Failed to create link token" });
+        return res.status(500).json({ error: "Failed to create link token" });
     }
 }
 
@@ -23,11 +23,11 @@ const handleBankConnection = async (req, res) => {
         await accountService.importAccounts(addedBank._id);
         await transactionService.importTransactions(addedBank._id);
         await balanceHistoryService.buildInitialHistoryForBank(addedBank._id);
-        res.json({ success: true});
+        return res.json({ success: true});
     }
     catch (error) {
         console.log(error.response?.data || error.message);
-        res.status(500).json("Exchange public token for access token failed");
+        return res.status(500).json("Bank connection failed");
     }
 }
 export default { createLinkToken, handleBankConnection };

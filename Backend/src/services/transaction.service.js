@@ -10,7 +10,7 @@ const importTransactions = async (bankId) => {
              "client_id": process.env.PLAID_CLIENT_ID,
              "secret": process.env.PLAID_SECRET,
              "access_token": foundedBank.accessToken,
-             "start_date": new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().split("T")[0],
+             "start_date": new Date(new Date().setFullYear(new Date().getFullYear() - 10)).toISOString().split("T")[0],
              "end_date": new Date().toISOString().split("T")[0],
              "options": { "count": 250, "offset": 0}
      });

@@ -1,6 +1,7 @@
 import axios from "axios";
 import Account from "../models/Account";
 import Bank from "../models/Bank";
+import mongoose from "mongoose";
 
 async function importAccounts(bankId) {
     const foundedBank = await Bank.findById(bankId);
@@ -40,7 +41,7 @@ async function importAccounts(bankId) {
 }
 
 async function getAllAccountsByBankId(bankId){
-    return Account.find({bank: bankId})
+    return Account.find({ bank: new mongoose.Types.ObjectId(bankId) })
         .select("_id balances name type")
         .lean();
 }

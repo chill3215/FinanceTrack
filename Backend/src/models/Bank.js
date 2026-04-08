@@ -11,4 +11,7 @@ const bankSchema = new mongoose.Schema({
     accessToken: String,
     itemId: String,
 });
+
+bankSchema.index({ user: 1, institutionId: 1 }, { unique: true });
+
 export default mongoose.model("Bank", bankSchema)

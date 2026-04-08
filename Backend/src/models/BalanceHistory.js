@@ -6,8 +6,15 @@ const balanceHistorySchema = new mongoose.Schema({
         ref: "Account",
         required: true,
     },
-    date: Date,
-    balance: Number,
+    date: {
+        type: Date,
+        required: true
+    },
+    balance: {
+        type: Number,
+        required: true
+    },
 });
+balanceHistorySchema.index({ account: 1, date: 1 }, { unique: true });
 
 export default mongoose.model("BalanceHistory", balanceHistorySchema);
