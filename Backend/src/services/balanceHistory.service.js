@@ -56,9 +56,14 @@ async function getMonthlyBalanceOfUser(userId) {
 
         const accounts = await Account.find({
             bank: { $in: bankIds }
-        }).select("accountId");
+        }).select("accountId balances");
 
         const accountIds = accounts.map(a => a.accountId);
+
+        const currentTotalBalance = accounts.reduce(
+            (sum, acc) => sum + acc.balances.current,
+            0
+        );
 
         const monthlyFlow = await Transaction.aggregate([
             {
@@ -77,25 +82,152 @@ async function getMonthlyBalanceOfUser(userId) {
             },
             {
                 $sort: {
-                    "_id.year": 1,
-                    "_id.month": 1
+                    "_id.year": -1,
+                    "_id.month": -1
                 }
             }
         ]);
 
-        let runningBalance = 0;
+        let runningBalance = currentTotalBalance;
 
-        return monthlyFlow.map(item => {
-            runningBalance += item.netChange;
+        const result = monthlyFlow.map(item => {
+            const monthBalance = runningBalance;
+            runningBalance -= item.netChange;
 
             return {
                 label: `${item._id.month}/${item._id.year}`,
-                balance: runningBalance
+                balance: monthBalance
             };
         });
 
+        return result.reverse();
+
     } catch (error) {
         console.error("Get monthly balance of users failed:");
+    }
+}
+
+async function getWeeklyBalanceOfUser(userId) {
+    try {
+        const banks = await Bank.find({
+            user: new mongoose.Types.ObjectId(userId)
+        }).select("_id");
+
+        const bankIds = banks.map(b => b._id);
+
+        const accounts = await Account.find({
+            bank: { $in: bankIds }
+        }).select("accountId balances");
+
+        const accountIds = accounts.map(a => a.accountId);
+
+        const currentTotalBalance = accounts.reduce(
+            (sum, acc) => sum + acc.balances.current,
+            0
+        );
+
+        const weeklyFlow = await Transaction.aggregate([
+            {
+                $match: {
+                    accountId: { $in: accountIds }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $isoWeekYear: "$date" },
+                        week: { $isoWeek: "$date" }
+                    },
+                    netChange: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: {
+                    "_id.year": -1,
+                    "_id.week": -1
+                }
+            }
+        ]);
+
+        let runningBalance = currentTotalBalance;
+
+        const result = weeklyFlow.map(item => {
+            const weekBalance = runningBalance;
+            runningBalance -= item.netChange;
+
+            return {
+                label: `W${item._id.week}/${item._id.year}`,
+                balance: weekBalance
+            };
+        });
+
+        return result.reverse();
+
+    } catch (error) {
+        console.error("Get weekly balance failed:", error);
+        return [];
+    }
+}
+
+async function getYearlyBalanceOfUser(userId) {
+    try {
+        const banks = await Bank.find({
+            user: new mongoose.Types.ObjectId(userId)
+        }).select("_id");
+
+        const bankIds = banks.map(b => b._id);
+
+        const accounts = await Account.find({
+            bank: { $in: bankIds }
+        }).select("accountId balances");
+
+        const accountIds = accounts.map(a => a.accountId);
+
+        const currentTotalBalance = accounts.reduce(
+            (sum, acc) => sum + acc.balances.current,
+            0
+        );
+
+        const yearlyFlow = await Transaction.aggregate([
+            {
+                $match: {
+                    accountId: { $in: accountIds }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$date" }
+                    },
+                    netChange: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: {
+                    "_id.year": -1
+                }
+            }
+        ]);
+
+        let runningBalance = currentTotalBalance;
+
+        const result = yearlyFlow.map(item => {
+            const yearBalance = runningBalance;
+
+            runningBalance -= item.netChange;
+
+            return {
+                label: `${item._id.year}`,
+                balance: yearBalance
+            };
+        });
+
+        return result.reverse();
+
+
+    } catch (error) {
+        console.error("Get yearly balance failed:", error);
+        return [];
     }
 }
 
@@ -108,5 +240,7 @@ async function getHistory(accountId) {
 export default {
     buildInitialHistoryForBank,
     getMonthlyBalanceOfUser,
+    getWeeklyBalanceOfUser,
+    getYearlyBalanceOfUser,
     getHistory
 }

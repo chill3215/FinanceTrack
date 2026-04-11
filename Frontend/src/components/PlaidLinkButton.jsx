@@ -1,7 +1,7 @@
 import {usePlaidLink} from "react-plaid-link";
 import {useEffect, useState} from "react";
 
-function PlaidLinkButton() {
+function PlaidLinkButton({ onImportSuccess }) {
     const token = localStorage.getItem("jwtToken");
     const [linkToken, setLinkToken] = useState(null);
     useEffect(() => {
@@ -20,12 +20,16 @@ function PlaidLinkButton() {
 
     if (!linkToken) return <button disabled>Loading...</button>
     return (
-        <PlaidLink linkToken={linkToken} token={token}/>
+        <PlaidLink
+            linkToken={linkToken}
+            token={token}
+            onImportSuccess={onImportSuccess}
+        />
     )
 
 }
 
-function PlaidLink({linkToken, token}) {
+function PlaidLink({linkToken, token, onImportSuccess}) {
     const { open, ready } = usePlaidLink({
         token: linkToken,
         onSuccess: async (public_token, metadata) => {
@@ -44,6 +48,7 @@ function PlaidLink({linkToken, token}) {
                 })
             });
             alert("Connected to bank!");
+            onImportSuccess();
         }
     })
 
