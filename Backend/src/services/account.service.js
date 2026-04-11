@@ -40,6 +40,12 @@ async function importAccounts(bankId) {
     }
 }
 
+async function getAllAccountsByUserId(userId){
+    return Account.find({ user: new mongoose.Types.ObjectId(userId) })
+        .select("_id balances name type")
+        .lean();
+}
+
 async function getAllAccountsByBankId(bankId){
     return Account.find({ bank: new mongoose.Types.ObjectId(bankId) })
         .select("_id balances name type")
@@ -48,6 +54,7 @@ async function getAllAccountsByBankId(bankId){
 
 export default {
     importAccounts,
+    getAllAccountsByUserId,
     getAllAccountsByBankId,
 
 }

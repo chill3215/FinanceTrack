@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Login from "./pages/Login.jsx";
 import {BrowserRouter, Navigate, Route, Router, Routes} from "react-router-dom";
-import MainPage from "./pages/MainPage.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 import Register from "./pages/Register.jsx";
 
 function App() {
@@ -16,10 +16,16 @@ function App() {
                />
                <Route
                path="/login"
-               element={<Login onLogin={()=> setIsLoggedIn(true)}/>}/>
+               element={<Login onLogin={()=> setIsLoggedIn(true)}/>}
+               />
                <Route
                path="/main"
-               element={isLoggedIn? <MainPage/> : <Navigate to="/login" replace/>}/>
+               element={isLoggedIn? <Dashboard/> : <Navigate to="/login" replace/>}
+               />
+               <Route
+               path="/"
+               element={<Navigate to="/register" replace/>}
+               />
            </Routes>
        </BrowserRouter>
     );

@@ -33,11 +33,9 @@ async function buildInitialHistoryForBank(bankId) {
                 }
 
                 runningBalance -= transaction.amount;
-                console.log(`running balance: ${runningBalance}`)
             }
 
             const history = Array.from(monthlyMap.values()).reverse();
-            console.log(history);
 
             if (history.length > 0) {
                 const result = await BalanceHistory.insertMany(history, { ordered: false });

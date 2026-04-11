@@ -1,8 +1,17 @@
 import accountService from "../services/account.service";
 import balanceHistoryService from "../services/balanceHistory.service";
 
+const getAllAccountsFromUser = async (req, res) => {
+    try{
+        return res.json(await accountService.getAllAccountsByUserId(req.userId));
+    }
+    catch (error){
+        console.log(error.response?.data || error.message);
+        return res.status(500).json("Fetch Accounts failed")
+    }
+}
 
-const getAllAccounts = async (req, res) => {
+const getAllAccountsOfBankFromUser = async (req, res) => {
     try{
         return res.json(await accountService.getAllAccountsByBankId(req.params.bankId));
     }
@@ -22,6 +31,7 @@ const getAccountBalanceHistory = async (req, res) => {
 }
 
 export default {
-    getAllAccounts,
+    getAllAccountsFromUser,
+    getAllAccountsOfBankFromUser,
     getAccountBalanceHistory
 };
