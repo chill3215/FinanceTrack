@@ -31,16 +31,6 @@ import StatCard from "../components/StatCard.jsx"
 import SidebarItem from "../components/SidebarItem.jsx"
 const currencyFormat = format(",.2f");
 
-const performanceData = [
-    { date: "2023-10", value: 45000 },
-    { date: "2023-11", value: 48200 },
-    { date: "2023-12", value: 47500 },
-    { date: "2024-01", value: 51000 },
-    { date: "2024-02", value: 53800 },
-    { date: "2024-03", value: 58200 },
-    { date: "2024-04", value: 57400 },
-];
-
 const allocationData = [
     { name: "Stocks", value: 35000, color: "#2563eb" },
     { name: "ETFs", value: 15000, color: "#10b981" },
@@ -60,11 +50,11 @@ export default function Dashboard() {
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const [activeTab, setActiveTab] = useState("dashboard");
     const [statInfos, setStatInfos] = useState([]);
-    const [history, setHistory] = useState([]);
+    const [performanceData, setPerformanceData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function loadDashboard() {
+        async function loadStatInfos() {
             try {
                 const token = localStorage.getItem("jwtToken");
 
@@ -92,7 +82,36 @@ export default function Dashboard() {
                 setLoading(false);
             }
         }
-        loadDashboard();
+        loadStatInfos();
+
+        async function loadChart() {
+            try {
+                const token = localStorage.getItem("jwtToken");
+
+                const res = await fetch(
+                    `${BACKEND_URL}/balance/monthly`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await res.json();
+
+                setPerformanceData(
+                    data.map(item => ({
+                        date: item.label,
+                        value: item.balance
+                    }))
+                );
+
+            } catch (err) {
+                console.error("Chart load failed:", err);
+            }
+        }
+
+        loadChart();
     }, []);
 
     return (
@@ -214,7 +233,10 @@ export default function Dashboard() {
                                         axisLine={false}
                                         tickLine={false}
                                         tick={{ fontSize: 12, fill: "#64748b" }}
-                                        tickFormatter={(value) => `€${value/1000}k`}
+                                        tickFormatter={(value) =>
+                                            `€${(value / 1000).toFixed(2)}k`
+                                        }
+                                        domain={['dataMin - 500', 'dataMax + 500']}
                                     />
                                     <Tooltip
                                         contentStyle={{ backgroundColor: "#fff", borderRadius: "12px", border: "1px solid #e2e8f0", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}

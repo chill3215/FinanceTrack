@@ -22,7 +22,6 @@ const handleBankConnection = async (req, res) => {
         const addedBank = await bankService.addBank(bank, req.userId, accessToken, itemId);
         await accountService.importAccounts(addedBank._id);
         await transactionService.importTransactions(addedBank._id);
-        await balanceHistoryService.buildInitialHistoryForBank(addedBank._id);
         return res.json({ success: true});
     }
     catch (error) {

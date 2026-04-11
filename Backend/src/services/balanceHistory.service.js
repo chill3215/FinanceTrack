@@ -2,6 +2,7 @@ import Account from "../models/Account";
 import Transaction from "../models/Transaction";
 import BalanceHistory from "../models/BalanceHistory";
 import mongoose from "mongoose";
+import Bank from "../models/Bank";
 
 async function buildInitialHistoryForBank(bankId) {
     const accounts = await Account.find({bank: new mongoose.Types.ObjectId(bankId) }).lean();
@@ -47,6 +48,57 @@ async function buildInitialHistoryForBank(bankId) {
     }
 }
 
+async function getMonthlyBalanceOfUser(userId) {
+    try {
+
+        const banks = await Bank.find({ user: new mongoose.Types.ObjectId(userId) }).select("_id");
+        const bankIds = banks.map(b => b._id);
+
+        const accounts = await Account.find({
+            bank: { $in: bankIds }
+        }).select("accountId");
+
+        const accountIds = accounts.map(a => a.accountId);
+
+        const monthlyFlow = await Transaction.aggregate([
+            {
+                $match: {
+                    accountId: { $in: accountIds }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$date" },
+                        month: { $month: "$date" }
+                    },
+                    netChange: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: {
+                    "_id.year": 1,
+                    "_id.month": 1
+                }
+            }
+        ]);
+
+        let runningBalance = 0;
+
+        return monthlyFlow.map(item => {
+            runningBalance += item.netChange;
+
+            return {
+                label: `${item._id.month}/${item._id.year}`,
+                balance: runningBalance
+            };
+        });
+
+    } catch (error) {
+        console.error("Get monthly balance of users failed:");
+    }
+}
+
 async function getHistory(accountId) {
     return BalanceHistory.find({
         account: accountId
@@ -55,5 +107,6 @@ async function getHistory(accountId) {
 
 export default {
     buildInitialHistoryForBank,
+    getMonthlyBalanceOfUser,
     getHistory
 }

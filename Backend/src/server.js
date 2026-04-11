@@ -10,6 +10,7 @@ import plaidRoutes from "./routes/plaid.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import passport from "passport";
 import accountRoutes from "./routes/account.routes";
+import balanceHistoryRoutes from "./routes/balanceHistory.routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000; // process.env ist ein Obj, das alle Umgebungsvariablen enthält
@@ -36,6 +37,7 @@ app.use(passport.initialize());
 app.use("/auth", authRoutes);
 app.use("/plaid", plaidRoutes);
 app.use("/accounts", accountRoutes);
+app.use("/balance", balanceHistoryRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
