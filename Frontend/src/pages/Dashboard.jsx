@@ -11,9 +11,10 @@ import {
 import PlaidLinkButton from "../components/PlaidLinkButton.jsx";
 import SidebarItem from "../components/SidebarItem.jsx"
 import BalanceChart from "../components/BalanceChart.jsx";
-import AssetAllocation from "../components/AssetAllocation.jsx";
+import AssetAllocation from "../components/Portfolio.jsx";
 import AssetsTable from "../components/AssetsTable.jsx";
 import StatSection from "../components/StatSection.jsx";
+import Portfolio from "../components/Portfolio.jsx";
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -29,6 +30,7 @@ export default function Dashboard() {
                     <span className="text-xl font-bold tracking-tight">FinanceTrack</span>
                 </div>
 
+                {/*Sidebar for navigation*/}
                 <nav className="flex-1 px-4 space-y-1 mt-4">
                     <SidebarItem
                         icon={<LayoutDashboard size={20} />}
@@ -50,6 +52,7 @@ export default function Dashboard() {
                     />
                 </nav>
 
+                {/*Logout*/}
                 <div className="p-4 border-t border-slate-100">
                     <button
                         onClick={() => {
@@ -65,9 +68,10 @@ export default function Dashboard() {
             </aside>
 
             <main className="flex-1 p-8 overflow-y-auto">
+                {/*Header and Plaid Import*/}
                 <header className="flex justify-between items-center mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-slate-900">Portfolio Overview</h1>
+                        <h1 className="text-3xl font-bold text-slate-900">Financial Overview</h1>
                         <p className="text-slate-500 mt-1">Welcome back, here's what's happening with your wealth today.</p>
                     </div>
                     <div className="flex gap-3">
@@ -80,12 +84,12 @@ export default function Dashboard() {
                     </div>
                 </header>
 
+                {/*Overall statistics*/}
                 <StatSection refreshKey={refreshKey}/>
-
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <BalanceChart refreshKey={refreshKey}/>
-                    <AssetAllocation refreshKey={refreshKey}/>
+                    <Portfolio refreshKey={refreshKey}/>
                 </div>
 
                 <AssetsTable refreshKey={refreshKey}/>

@@ -1,7 +1,6 @@
 import {authenticate} from "../auth/jwt";
 import express from "express";
 import accountController from "../controllers/account.controller";
-import account from "../models/Account";
 
 const router = express.Router();
 
@@ -13,5 +12,6 @@ router.get("/history/", authenticate, accountController.getAccountBalanceHistory
 
 router.get("/history/:accountId", authenticate, accountController.getAccountBalanceHistory);
 
+router.get("/portfolio", authenticate, accountController.getPortfolio);
 
 export default router;

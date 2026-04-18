@@ -52,9 +52,33 @@ async function getAllAccountsByBankId(bankId){
         .lean();
 }
 
+async function getPortfolio(userId) {
+    const accounts = await Account.find({
+        user: new mongoose.Types.ObjectId(userId),
+    }).select("balances type");
+    let total = 0;
+    const allocation = {
+        "depository": 0,
+        "investment": 0,
+        "payroll": 0,
+        "credit": 0,
+        "loan": 0,
+        "other": 0,
+    }
+    accounts.forEach(account => {
+        allocation[account.type] += account.balances.current;
+        total += account.balances.current;
+    });
+    return {
+        total,
+        allocation
+    };
+}
+
+
 export default {
     importAccounts,
     getAllAccountsByUserId,
     getAllAccountsByBankId,
-
+    getPortfolio
 }

@@ -30,8 +30,18 @@ const getAccountBalanceHistory = async (req, res) => {
     }
 }
 
+const getPortfolio = async (req, res) => {
+    try {
+        return res.json(await accountService.getPortfolio(req.userId));
+    } catch (error) {
+        console.log(error.response?.data || error.message);
+        return res.status(500).json("Fetch asset allocation failed");
+    }
+}
+
 export default {
     getAllAccountsFromUser,
     getAllAccountsOfBankFromUser,
-    getAccountBalanceHistory
+    getAccountBalanceHistory,
+    getPortfolio,
 };
