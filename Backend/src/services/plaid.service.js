@@ -13,7 +13,7 @@ const createLinkToken = async () => {
                 "client_user_id": "user_good"
             },
             "products": ["transactions"],
-            "additional_consented_products": ["auth"]
+            "additional_consented_products": ["auth", "investments"]
         },
         { headers: { 'Content-Type': 'application/json' } }
     )

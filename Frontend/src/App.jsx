@@ -6,17 +6,18 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Register from "./pages/Register.jsx";
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem("jwtToken")));
+
     return (
        <BrowserRouter>
            <Routes>
                <Route
                path="/register"
-               element={<Register/>}
+               element={isLoggedIn ? <Navigate to="/main" replace /> : <Register/>}
                />
                <Route
                path="/login"
-               element={<Login onLogin={()=> setIsLoggedIn(true)}/>}
+               element={isLoggedIn ? <Navigate to="/main" replace /> : <Login onLogin={()=> setIsLoggedIn(true)}/>} 
                />
                <Route
                path="/main"
@@ -24,7 +25,7 @@ function App() {
                />
                <Route
                path="/"
-               element={<Navigate to="/register" replace/>}
+               element={isLoggedIn ? <Navigate to="/main" replace /> : <Navigate to="/login" replace />}
                />
            </Routes>
        </BrowserRouter>

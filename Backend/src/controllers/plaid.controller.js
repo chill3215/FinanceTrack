@@ -3,6 +3,7 @@ import accountService from "../services/account.service";
 import bankService from "../services/bank.service";
 import transactionService from "../services/transaction.service";
 import balanceHistoryService from "../services/balanceHistory.service";
+import holdingService from "../services/holding.service";
 
 const createLinkToken = async (req, res) => {
     try {
@@ -22,6 +23,7 @@ const handleBankConnection = async (req, res) => {
         const addedBank = await bankService.addBank(bank, req.userId, accessToken, itemId);
         await accountService.importAccounts(addedBank._id);
         await transactionService.importTransactions(addedBank._id);
+        await holdingService.importHoldings(addedBank._id);
         return res.json({ success: true});
     }
     catch (error) {

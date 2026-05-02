@@ -6,6 +6,7 @@ import db from "./db";
 import rateLimit from "express-rate-limit";
 import plaidRoutes from "./routes/plaid.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import holdingRoutes from "./routes/holding.routes.js";
 import passport from "passport";
 import accountRoutes from "./routes/account.routes";
 import balanceHistoryRoutes from "./routes/balanceHistory.routes";
@@ -35,6 +36,7 @@ app.use("/auth", authRoutes);
 app.use("/plaid", plaidRoutes);
 app.use("/accounts", accountRoutes);
 app.use("/balance", balanceHistoryRoutes);
+app.use("/holdings", holdingRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
