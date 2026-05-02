@@ -14,10 +14,11 @@ router.get('/google',
 );
 
 router.get('/google/callback',
-    passport.authenticate('google', {session: 'false'}),
+    passport.authenticate('google', {session: false}),
     (req, res) => {
         const token = signToken(req.user._id);
-        res.json({token });
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        res.redirect(`${frontendUrl}/auth/callback?token=${token}`);
     }
 );
 

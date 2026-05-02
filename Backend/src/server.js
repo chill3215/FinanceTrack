@@ -8,8 +8,11 @@ import plaidRoutes from "./routes/plaid.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import holdingRoutes from "./routes/holding.routes.js";
 import passport from "passport";
+import { setupPassport } from "./auth/passport.js";
 import accountRoutes from "./routes/account.routes";
 import balanceHistoryRoutes from "./routes/balanceHistory.routes";
+
+setupPassport();
 
 const app = express();
 const PORT = process.env.PORT || 3000; // process.env ist ein Obj, das alle Umgebungsvariablen enthält

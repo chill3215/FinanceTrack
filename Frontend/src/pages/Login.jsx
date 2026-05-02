@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, Lock, LogIn, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Lock, LogIn, ArrowRight, AlertCircle, Loader2, Globe } from "lucide-react";
 
 export default function Login({ onLogin }) {
     const navigate = useNavigate();
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+    function handleGoogleLogin() {
+        window.location.href = `${BACKEND_URL}/auth/google`;
+    }
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -121,6 +125,14 @@ export default function Login({ onLogin }) {
                                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     </>
                                 )}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleGoogleLogin}
+                                className="w-full bg-white border border-slate-200 text-slate-700 font-bold py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2 mt-2 hover:bg-slate-100 transition-all"
+                            >
+                                <Globe className="w-5 h-5 text-blue-600" />
+                                Sign in with Google
                             </button>
                         </div>
                     </div>
