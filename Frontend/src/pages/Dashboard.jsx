@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     TrendingUp,
     PieChart as PieChartIcon,
@@ -22,6 +23,7 @@ import TransactionsPage from "./TransactionsPage.jsx";
 import IncomeExpensePage from "./IncomeExpensePage.jsx";
 
 export default function Dashboard() {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("dashboard");
     const [refreshKey, setRefreshKey] = useState(0);
     const [bankStatus, setBankStatus] = useState(null); // null | "connecting" | "success" | "error"
@@ -73,7 +75,7 @@ export default function Dashboard() {
                     <button
                         onClick={() => {
                             localStorage.removeItem("jwtToken");
-                            window.location.href = "/login";
+                            navigate("/login", { replace: true });
                         }}
                         className="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-medium"
                     >
