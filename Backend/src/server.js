@@ -29,7 +29,14 @@ const limiter = rateLimit({
 })
 
 app.use(limiter);
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "https://your-frontend.vercel.app"
+    ],
+    credentials: true
+}));
 
 // Test route
 app.get("/", (req, res) =>{
