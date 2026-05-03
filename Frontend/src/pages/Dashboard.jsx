@@ -28,6 +28,13 @@ export default function Dashboard({ onLogout }) {
     const [refreshKey, setRefreshKey] = useState(0);
     const [bankStatus, setBankStatus] = useState(null); // null | "connecting" | "success" | "error"
 
+    const handleLogout = () => {
+        localStorage.removeItem("jwtToken");
+        if (onLogout) onLogout();
+        navigate("/login", { replace: true });
+        window.location.href = "/login";
+    };
+
     return (
         <div className="min-h-screen bg-[#f8fafc] flex text-slate-900 font-sans">
             <aside className="w-64 bg-white border-r border-slate-200 flex flex-col sticky top-0 h-screen">
@@ -73,11 +80,7 @@ export default function Dashboard({ onLogout }) {
 
                 <div className="p-4 border-t border-slate-100">
                     <button
-                        onClick={() => {
-                            localStorage.removeItem("jwtToken");
-                            if (onLogout) onLogout();
-                            navigate("/login", { replace: true });
-                        }}
+                        onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all font-medium"
                     >
                         <LogOut size={20} />
