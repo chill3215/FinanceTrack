@@ -1,9 +1,10 @@
 {
   "name": "fintrack",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/server.js",
+    "build": "babel src -d dist",
+    "start": "node dist/server.js",
     "dev": "nodemon --exec babel-node src/server.js",
     "seed:demo": "babel-node scripts/seed-demo.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -28,9 +29,5 @@
     "@babel/node": "^7.28.0",
     "@babel/preset-env": "^7.28.5",
     "nodemon": "^3.1.11"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  }
 }
