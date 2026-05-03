@@ -37,6 +37,10 @@ function RegisterEntry({ isLoggedIn }) {
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem("jwtToken")));
 
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+    };
+
     return (
        <BrowserRouter>
            <Routes>
@@ -50,7 +54,7 @@ function App() {
                />
                <Route
                path="/main"
-               element={isLoggedIn? <Dashboard/> : <Navigate to="/login" replace/>}
+               element={isLoggedIn ? <Dashboard onLogout={handleLogout}/> : <Navigate to="/login" replace/>}
                />
                <Route
                path="/auth/callback"
