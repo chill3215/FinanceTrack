@@ -54,7 +54,7 @@ function StatSection({ refreshKey }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <StatCard
                 label="Total Balance"
-                value={`$${currencyFormat(statInfos[0])}`}
+                value={`€${currencyFormat(statInfos[0])}`}
                 change="0%"
                 isPositive={true}
                 icon={<Wallet className="text-blue-600" />}
@@ -67,10 +67,10 @@ function StatSection({ refreshKey }) {
                 icon={<TrendingUp className="text-emerald-600" />}
             />
             <StatCard
-                label="Total Assets"
+                label="Accounts"
                 value={statInfos[1]}
-                change="0%"
-                isPositive={false}
+                change=""
+                isPositive={true}
                 icon={<PieChartIcon className="text-amber-600" />}
             />
         </div>

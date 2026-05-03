@@ -10,7 +10,7 @@ const createLinkToken = async (req, res) => {
     const linkToken = await plaidService.createLinkToken();
         return res.json(linkToken);
     } catch (error){
-        console.log(error.response?.data || error.message);
+        console.error(error.response?.data || error.message);
         return res.status(500).json({ error: "Failed to create link token" });
     }
 }
@@ -21,13 +21,15 @@ const handleBankConnection = async (req, res) => {
         const publicToken = req.body.public_token;
         const { accessToken, itemId } = await plaidService.exchangePublicToken(publicToken);
         const addedBank = await bankService.addBank(bank, req.userId, accessToken, itemId);
+        await accountService.clearImportedDataForBank(addedBank._id);
         await accountService.importAccounts(addedBank._id);
         await transactionService.importTransactions(addedBank._id);
         await holdingService.importHoldings(addedBank._id);
+        await balanceHistoryService.buildInitialHistoryForBank(addedBank._id);
         return res.json({ success: true});
     }
     catch (error) {
-        console.log(error.response?.data || error.message);
+        console.error(error.response?.data || error.message);
         return res.status(500).json("Bank connection failed");
     }
 }

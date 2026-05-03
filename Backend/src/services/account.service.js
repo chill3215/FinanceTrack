@@ -1,7 +1,31 @@
 import axios from "axios";
 import Account from "../models/Account";
 import Bank from "../models/Bank";
+import Transaction from "../models/Transaction";
+import Holding from "../models/Holding";
+import BalanceHistory from "../models/BalanceHistory";
 import mongoose from "mongoose";
+
+async function clearImportedDataForBank(bankId) {
+    const bankObjectId = new mongoose.Types.ObjectId(bankId);
+    const accounts = await Account.find({ bank: bankObjectId })
+        .select("_id accountId")
+        .lean();
+
+    const accountIds = accounts.map((account) => account.accountId).filter(Boolean);
+    const accountObjectIds = accounts.map((account) => account._id);
+
+    if (accountIds.length > 0) {
+        await Transaction.deleteMany({ accountId: { $in: accountIds } });
+        await Holding.deleteMany({ accountId: { $in: accountIds } });
+    }
+
+    if (accountObjectIds.length > 0) {
+        await BalanceHistory.deleteMany({ account: { $in: accountObjectIds } });
+    }
+
+    await Account.deleteMany({ bank: bankObjectId });
+}
 
 async function importAccounts(bankId) {
     const foundedBank = await Bank.findById(bankId);
@@ -42,13 +66,13 @@ async function importAccounts(bankId) {
 
 async function getAllAccountsByUserId(userId){
     return Account.find({ user: new mongoose.Types.ObjectId(userId) })
-        .select("_id balances name type")
+        .select("_id accountId balances name type subtype")
         .lean();
 }
 
 async function getAllAccountsByBankId(bankId){
     return Account.find({ bank: new mongoose.Types.ObjectId(bankId) })
-        .select("_id balances name type")
+        .select("_id accountId balances name type subtype")
         .lean();
 }
 
@@ -77,6 +101,7 @@ async function getPortfolio(userId) {
 
 
 export default {
+    clearImportedDataForBank,
     importAccounts,
     getAllAccountsByUserId,
     getAllAccountsByBankId,

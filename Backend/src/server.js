@@ -7,10 +7,12 @@ import rateLimit from "express-rate-limit";
 import plaidRoutes from "./routes/plaid.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import holdingRoutes from "./routes/holding.routes.js";
+import savingsGoalRoutes from "./routes/savingsGoal.routes.js";
 import passport from "passport";
 import { setupPassport } from "./auth/passport.js";
 import accountRoutes from "./routes/account.routes";
 import balanceHistoryRoutes from "./routes/balanceHistory.routes";
+import transactionRoutes from "./routes/transaction.routes";
 
 setupPassport();
 
@@ -23,6 +25,7 @@ const limiter = rateLimit({
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     ipv6Subnet: 56,
+    skip: () => true, // rate limiting disabled
 })
 
 app.use(limiter);
@@ -40,6 +43,8 @@ app.use("/plaid", plaidRoutes);
 app.use("/accounts", accountRoutes);
 app.use("/balance", balanceHistoryRoutes);
 app.use("/holdings", holdingRoutes);
+app.use("/savings-goals", savingsGoalRoutes);
+app.use("/transactions", transactionRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

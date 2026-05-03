@@ -5,7 +5,7 @@ const getAllHoldingsFromUser = async (req, res) => {
     try {
         return res.json(await holdingService.getAllHoldingsByUserId(req.userId));
     } catch (error) {
-        console.log(error.response?.data || error.message);
+        console.error(error.response?.data || error.message);
         return res.status(500).json("Fetch holdings failed");
     }
 }
@@ -16,7 +16,7 @@ const importHoldings = async (req, res) => {
         const count = await holdingService.importHoldings(bankId);
         return res.json({ message: `Imported ${count} holdings` });
     } catch (error) {
-        console.log(error.response?.data || error.message);
+        console.error(error.response?.data || error.message);
         return res.status(500).json("Import holdings failed");
     }
 }
@@ -33,7 +33,7 @@ const importAllHoldingsForUser = async (req, res) => {
         
         return res.json({ message: `Imported ${totalCount} holdings from ${banks.length} banks` });
     } catch (error) {
-        console.log(error.response?.data || error.message);
+        console.error(error.response?.data || error.message);
         return res.status(500).json("Import all holdings failed");
     }
 }

@@ -5,9 +5,16 @@ import { Mail, Lock, LogIn, ArrowRight, AlertCircle, Loader2, Globe } from "luci
 export default function Login({ onLogin }) {
     const navigate = useNavigate();
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+    const DEMO_EMAIL = "demo@fintrack.app";
+    const DEMO_PASSWORD = "Demo123!";
 
     function handleGoogleLogin() {
         window.location.href = `${BACKEND_URL}/auth/google`;
+    }
+
+    function fillDemoUser() {
+        setEmail(DEMO_EMAIL);
+        setPassword(DEMO_PASSWORD);
     }
 
     const [email, setEmail] = useState("");
@@ -63,6 +70,19 @@ export default function Login({ onLogin }) {
                         <p className="text-slate-500 text-center mb-8">
                             Please enter your details to sign in
                         </p>
+
+                        <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 p-4">
+                            <p className="text-xs font-bold tracking-wide text-blue-700">DEMO USER</p>
+                            <p className="text-sm text-blue-900 mt-1">Email: {DEMO_EMAIL}</p>
+                            <p className="text-sm text-blue-900">Password: {DEMO_PASSWORD}</p>
+                            <button
+                                type="button"
+                                onClick={fillDemoUser}
+                                className="mt-3 text-xs font-bold bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 transition-colors"
+                            >
+                                Use Demo Credentials
+                            </button>
+                        </div>
 
                         {error && (
                             <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg flex items-start gap-3">
@@ -141,7 +161,7 @@ export default function Login({ onLogin }) {
                         <p className="text-slate-600 text-sm">
                             Don't have an account?{" "}
                             <button
-                                onClick={() => navigate("/register")}
+                                onClick={() => navigate("/register?from=login")}
                                 className="text-blue-600 font-bold hover:text-blue-700 transition-colors"
                             >
                                 Create one

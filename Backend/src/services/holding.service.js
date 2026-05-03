@@ -4,32 +4,27 @@ import Bank from "../models/Bank";
 import Holding from "../models/Holding";
 import axios from "axios";
 
-// user -> all accounts -> holdings
+// Types that are not real investable securities — exclude them
+const EXCLUDED_TYPES = new Set([
+    'cash', 'fixed income', 'money_market', 'loan', 'other', 'unknown',
+]);
+
+// user -> all accounts -> holdings (investment securities only)
 async function getAllHoldingsByUserId(userId) {
-    console.log('Getting holdings for userId:', userId);
-    
     const accounts = await Account.find(
         { user: new mongoose.Types.ObjectId(userId) },
         { accountId: 1 }
     ).lean();
-    
-    console.log('Found accounts:', accounts);
 
     const accountIds = accounts
         .map((account) => account.accountId)
         .filter(Boolean);
-        
-    console.log('Extracted accountIds:', accountIds);
 
-    if (!accountIds.length) {
-        console.log('No accountIds found, returning empty array');
-        return [];
-    }
+    if (!accountIds.length) return [];
 
     const holdings = await Holding.find({ accountId: { $in: accountIds } }).lean();
-    console.log('Found holdings:', holdings);
-    
-    return holdings;
+
+    return holdings.filter(h => !EXCLUDED_TYPES.has((h.type || '').toLowerCase()));
 }
 
 async function importHoldings(bankId) {

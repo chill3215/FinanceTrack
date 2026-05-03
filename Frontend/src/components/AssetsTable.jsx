@@ -28,7 +28,7 @@ function normalizeHolding(holding, index) {
     const symbol = holding.tickerSymbol || holding.securityId || "N/A";
     return {
         id: holding._id || `${holding.securityId}-${index}`,
-        name: holding.name || symbol || "Unknown asset",
+        name: holding.name || symbol || "Unknown investment",
         symbol,
         type: holding.type || "Unknown",
         price,
@@ -40,7 +40,7 @@ function normalizeHolding(holding, index) {
 
 function AssetsTable({ refreshKey }) {
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-    const [assets, setAssets] = useState([]);
+    const [investments, setInvestments] = useState([]);
 
     useEffect(() => {
         async function loadHoldings() {
@@ -52,68 +52,27 @@ function AssetsTable({ refreshKey }) {
                         "Content-Type": "application/json",
                     },
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Holdings fetch failed: ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`Holdings fetch failed: ${response.status}`);
                 const data = await response.json();
-                console.log("Fetched holdings:", data);
-                
-                if (data.length === 0) {
-                    // Try to import holdings automatically
-                    console.log("No holdings found, attempting to import...");
-                    try {
-                        const importResponse = await fetch(`${BACKEND_URL}/holdings/import-all`, {
-                            method: 'POST',
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                "Content-Type": "application/json",
-                            },
-                        });
-                        
-                        if (importResponse.ok) {
-                            const importResult = await importResponse.json();
-                            console.log("Import result:", importResult);
-                            
-                            // Fetch holdings again after import
-                            const retryResponse = await fetch(`${BACKEND_URL}/holdings/all`, {
-                                headers: {
-                                    Authorization: `Bearer ${token}`,
-                                    "Content-Type": "application/json",
-                                },
-                            });
-                            
-                            if (retryResponse.ok) {
-                                const retryData = await retryResponse.json();
-                                setAssets(retryData.map(normalizeHolding));
-                            }
-                        }
-                    } catch (importError) {
-                        console.error("Failed to import holdings:", importError);
-                    }
-                } else {
-                    setAssets(data.map(normalizeHolding));
-                }
+                setInvestments(data.map(normalizeHolding));
             } catch (err) {
                 console.error("Failed to load holdings:", err);
             }
         }
-
         loadHoldings();
     }, [refreshKey, BACKEND_URL]);
 
     return (
         <div className="mt-8 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-                <h3 className="text-lg font-bold">Your Assets</h3>
+                <h3 className="text-lg font-bold">Your Investments</h3>
                 <button className="text-blue-600 text-sm font-bold hover:underline">View All</button>
             </div>
             <div className="overflow-x-auto">
                 <table className="w-full text-left">
                     <thead>
                     <tr className="bg-slate-50/50 text-slate-500 text-xs uppercase tracking-wider font-bold">
-                        <th className="px-6 py-4">Asset</th>
+                        <th className="px-6 py-4">Investment</th>
                         <th className="px-6 py-4">Type</th>
                         <th className="px-6 py-4">Price</th>
                         <th className="px-6 py-4">Shares</th>
@@ -122,14 +81,14 @@ function AssetsTable({ refreshKey }) {
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                    {assets.length === 0 ? (
+                    {investments.length === 0 ? (
                         <tr>
                             <td colSpan="6" className="px-6 py-10 text-center text-slate-500">
                                 No holdings available
                             </td>
                         </tr>
                     ) : (
-                        assets.map((asset) => (
+                        investments.map((asset) => (
                             <tr key={asset.id} className="hover:bg-slate-50/50 transition-colors group cursor-pointer">
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">

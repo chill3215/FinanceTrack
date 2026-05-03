@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import Login from "./pages/Login.jsx";
-import {BrowserRouter, Navigate, Route, Router, Routes, useNavigate, useLocation} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes, useNavigate, useLocation} from "react-router-dom";
 import Dashboard from "./pages/Dashboard.jsx";
 import Register from "./pages/Register.jsx";
 
@@ -24,6 +24,16 @@ function GoogleCallback({ onLogin }) {
     return null;
 }
 
+function RegisterEntry({ isLoggedIn }) {
+    const location = useLocation();
+    const fromLogin = new URLSearchParams(location.search).get("from") === "login";
+
+    if (isLoggedIn) return <Navigate to="/main" replace />;
+    if (!fromLogin) return <Navigate to="/login" replace />;
+
+    return <Register />;
+}
+
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(localStorage.getItem("jwtToken")));
 
@@ -32,7 +42,7 @@ function App() {
            <Routes>
                <Route
                path="/register"
-               element={isLoggedIn ? <Navigate to="/main" replace /> : <Register/>}
+               element={<RegisterEntry isLoggedIn={isLoggedIn} />}
                />
                <Route
                path="/login"
@@ -48,6 +58,10 @@ function App() {
                />
                <Route
                path="/"
+               element={isLoggedIn ? <Navigate to="/main" replace /> : <Navigate to="/login" replace />}
+               />
+               <Route
+               path="*"
                element={isLoggedIn ? <Navigate to="/main" replace /> : <Navigate to="/login" replace />}
                />
            </Routes>
