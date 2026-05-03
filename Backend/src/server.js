@@ -33,7 +33,7 @@ app.use(cors({
     origin: [
         "http://localhost:3000",
         "http://localhost:5173",
-        "https://your-frontend.vercel.app"
+        "https://finance-track-phi.vercel.app"
     ],
     credentials: true
 }));
