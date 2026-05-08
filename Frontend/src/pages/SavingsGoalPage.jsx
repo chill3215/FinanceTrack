@@ -188,13 +188,11 @@ export default function SavingsGoalPage({ refreshKey }) {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 font-sans text-slate-90">
+    <div>
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Savings Goals</h1>
-          <p className="text-slate-500 font-medium">Plan your future and track your progress in real-time.</p>
-        </div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900">Savings Goals</h1>
+        <p className="text-slate-500 mt-1">Plan your future and track your progress in real-time.</p>
       </div>
 
       {/* Stats Cards */}
@@ -210,7 +208,6 @@ export default function SavingsGoalPage({ refreshKey }) {
             value={`€${currencyFormat(grandTotal)}`}
             icon={<PiggyBank size={22} />}
             color="amber"
-            subtitle={`${((totalSaved / (grandTotal || 1)) * 100).toFixed(1)}% overall progress`}
         />
         <StatCard 
             label="Milestones Hit"
@@ -222,64 +219,64 @@ export default function SavingsGoalPage({ refreshKey }) {
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
         {/* Goal Planner Form */}
-        <div className="xl:col-span-8 space-y-8">
+        <div className="xl:col-span-8 space-y-4">
           <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8 group">
             <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
                     <Plus size={20} />
                 </div>
-                <h2 className="text-xl font-black text-slate-900 tracking-tight">Create New Goal</h2>
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight">Create New Goal</h2>
             </div>
 
             <form onSubmit={addGoal} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-2 block">What are you saving for?</label>
+                <label className="text-md font-semibold text-slate-400 mb-2 block">What are you saving for?</label>
                 <input
                   value={goalName}
                   onChange={(e) => setGoalName(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 text-slate-900 font-bold focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden placeholder:text-slate-300"
+                  className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 text-slate-900 font-medium focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden placeholder:text-slate-300"
                   placeholder="e.g. Dream House, New Car, emergency Fund"
                 />
               </div>
               
               <div>
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-2 block">Target Amount (€)</label>
+                <label className="text-md font-semibold text-slate-400 mb-2 block">Target amount (€)</label>
                 <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 font-bold">€</div>
+                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 font-medium">€</div>
                     <input
                         type="number"
                         min="0"
                         value={targetAmount}
                         onChange={(e) => setTargetAmount(e.target.value)}
-                        className="w-full pl-10 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden"
+                        className="w-full pl-10 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden"
                         placeholder="0.00"
                     />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-2 block">Target Date</label>
+                <label className="text-md font-semibold text-slate-400 mb-2 block">Target date</label>
                 <div className="relative group">
                     <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 pointer-events-none" />
                     <input
                         type="date"
                         value={targetDate}
                         onChange={(e) => setTargetDate(e.target.value)}
-                        className="w-full pl-14 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden"
+                        className="w-full pl-14 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden"
                     />
                 </div>
               </div>
 
               <div className="md:col-span-2">
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-2 block">Initial Amount (Optional)</label>
+                <label className="text-md font-semibold text-slate-400 mb-2 block">Initial amount (optional)</label>
                 <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 font-bold">€</div>
+                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 font-medium">€</div>
                     <input
                         type="number"
                         min="0"
                         value={currentAmount}
                         onChange={(e) => setCurrentAmount(e.target.value)}
-                        className="w-full pl-10 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden"
+                        className="w-full pl-10 pr-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden"
                         placeholder="0.00"
                     />
                 </div>
@@ -288,7 +285,7 @@ export default function SavingsGoalPage({ refreshKey }) {
               <div className="md:col-span-2 pt-2">
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-slate-900 text-white font-black uppercase tracking-widest text-sm py-5 rounded-2xl shadow-xl shadow-blue-100 transition-all active:scale-95 duration-300"
+                  className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-slate-900 text-white font-bold uppercase tracking-widest text-sm py-5 rounded-2xl shadow-xl shadow-blue-100 transition-all active:scale-95 duration-300"
                 >
                   <Save size={20} />
                   Persist Savings Goal
@@ -308,7 +305,7 @@ export default function SavingsGoalPage({ refreshKey }) {
                         <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10">
                             <Calculator size={20} className="text-blue-400" />
                         </div>
-                        <h2 className="text-xl font-black italic">Strategy Plan</h2>
+                        <h2 className="text-xl font-bold">Strategy Plan</h2>
                     </div>
 
                     {goals.length === 0 ? (
@@ -325,19 +322,19 @@ export default function SavingsGoalPage({ refreshKey }) {
 
                                 return (
                                     <div key={goal.id} className="pb-6 border-b border-white/5 last:border-0 last:pb-0 group">
-                                        <p className="font-black text-sm text-blue-100 uppercase tracking-wider mb-2 group-hover:text-blue-400 transition-colors">{goal.name}</p>
+                                        <p className="font-semibold text-sm text-blue-100 uppercase tracking-wider mb-2 group-hover:text-blue-400 transition-colors">{goal.name}</p>
                                         {isCompleted ? (
-                                            <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                                            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400">
                                                 <CheckCircle2 size={14} />
                                                 Goal Achieved!
                                             </div>
                                         ) : (
                                             <div className="flex items-center gap-3">
-                                                <div className="text-2xl font-black">€{currencyFormat(monthly)}</div>
-                                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">/ month</div>
+                                                <div className="text-2xl font-bold">€{currencyFormat(monthly)}</div>
+                                                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500 whitespace-nowrap">/ month</div>
                                             </div>
                                         )}
-                                        <p className="text-[10px] text-slate-500 mt-2 font-bold italic">
+                                        <p className="text-[10px] text-slate-500 mt-2 font-medium">
                                             {isCompleted ? "Fully funded" : `Calculated for ${months} months remaining`}
                                         </p>
                                     </div>
@@ -354,11 +351,11 @@ export default function SavingsGoalPage({ refreshKey }) {
       <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-50 overflow-hidden">
         <div className="px-8 py-7 border-b border-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/20">
             <div>
-                <h3 className="text-xl font-black text-slate-900 tracking-tight">Active Milestones</h3>
-                <p className="text-xs text-slate-500 font-bold mt-1 uppercase tracking-wider italic">Historical tracking of your financial ambitions.</p>
+                <h3 className="text-xl font-bold text-slate-900">Active Milestones</h3>
+                <p className="text-md text-slate-500 font-medium mt-1">Historical tracking of your financial ambitions.</p>
             </div>
             <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black text-slate-400 uppercase px-3 py-1.5 bg-white rounded-xl border border-slate-200">
+                <span className="text-[10px] font-semibold text-slate-400 uppercase px-3 py-1.5 bg-white rounded-xl border border-slate-200">
                     {goals.length} ACTIVE
                 </span>
             </div>
@@ -376,13 +373,13 @@ export default function SavingsGoalPage({ refreshKey }) {
               <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center">
                   <TrendingUp size={32} className="text-slate-200" />
               </div>
-              <p className="text-slate-400 text-sm font-black uppercase tracking-widest">No ambitions detected.</p>
+              <p className="text-slate-400 text-sm font-semibold uppercase tracking-widest">No ambitions detected.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] border-b border-slate-50">
+                <tr className="text-slate-400 text-[10px] font-semibold uppercase tracking-[0.2em] border-b border-slate-50">
                   <th className="px-8 py-6">Objective</th>
                   <th className="px-8 py-6 text-center">Status</th>
                   <th className="px-8 py-6 text-right">Target</th>
@@ -401,8 +398,8 @@ export default function SavingsGoalPage({ refreshKey }) {
                     <tr key={goal.id} className="group hover:bg-slate-50/70 transition-all cursor-pointer">
                       <td className="px-8 py-6">
                         <div className="flex flex-col">
-                            <span className="font-black text-sm tracking-tight mb-1">{goal.name}</span>
-                            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                            <span className="font-semibold text-sm tracking-tight mb-1">{goal.name}</span>
+                            <div className="flex items-center gap-2 text-[10px] font-medium text-slate-400">
                                 <Calendar size={12} />
                                 {goal.targetDate}
                             </div>
@@ -416,32 +413,32 @@ export default function SavingsGoalPage({ refreshKey }) {
                                     style={{ width: `${progress}%` }} 
                                 />
                             </div>
-                            <span className={`text-[10px] font-black italic tracking-widest ${isCompleted ? 'text-emerald-600' : 'text-slate-900'}`}>
+                            <span className={`text-[10px] font-semibold tracking-widest ${isCompleted ? 'text-emerald-600' : 'text-slate-900'}`}>
                                 {progress.toFixed(0)}% Complete
                             </span>
                         </div>
                       </td>
-                      <td className="px-8 py-6 text-right font-black text-sm">€{currencyFormat(goal.targetAmount)}</td>
+                      <td className="px-8 py-6 text-right font-semibold text-sm">€{currencyFormat(goal.targetAmount)}</td>
                       <td className="px-8 py-6 text-right">
                         {editingGoalId === goal.id ? (
                           <div className="flex items-center justify-end">
                             <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-blue-600 font-bold text-xs">€</div>
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-blue-600 font-medium text-xs">€</div>
                                 <input
                                     type="number"
                                     min="0"
                                     value={editCurrentAmount}
                                     onChange={(e) => setEditCurrentAmount(e.target.value)}
-                                    className="w-28 rounded-xl border border-blue-200 bg-blue-50 pl-7 pr-3 py-2 text-sm font-black text-blue-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
+                                    className="w-28 rounded-xl border border-blue-200 bg-blue-50 pl-7 pr-3 py-2 text-sm font-semibold text-blue-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
                                     autoFocus
                                 />
                             </div>
                           </div>
                         ) : (
-                          <span className="font-black text-sm text-slate-900 italic">€{currencyFormat(goal.currentAmount)}</span>
+                          <span className="font-semibold text-sm text-slate-900">€{currencyFormat(goal.currentAmount)}</span>
                         )}
                       </td>
-                      <td className={`px-8 py-6 text-right font-black text-sm ${isCompleted ? 'text-emerald-500 italic' : 'text-slate-400'}`}>
+                      <td className={`px-8 py-6 text-right font-semibold text-sm ${isCompleted ? 'text-emerald-500' : 'text-slate-400'}`}>
                         {isCompleted ? "GOAL HIT" : `€${currencyFormat(remaining)}`}
                       </td>
                       <td className="px-8 py-6 text-right">
@@ -495,7 +492,7 @@ export default function SavingsGoalPage({ refreshKey }) {
   );
 }
 
-function StatCard({ label, value, subtitle, icon, color }) {
+function StatCard({ label, value, icon, color }) {
     const colorMap = {
         blue: "bg-blue-50 text-blue-600 border-blue-100",
         emerald: "bg-emerald-50 text-emerald-600 border-emerald-100",
@@ -514,12 +511,8 @@ function StatCard({ label, value, subtitle, icon, color }) {
                 </div>
                 
                 <hgroup>
-                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1">{label}</p>
-                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">{value}</h3>
-                    {subtitle && <p className="text-[10px] font-bold text-slate-400 mt-2 italic flex items-center gap-1">
-                        <ArrowRight size={10} className="text-blue-500" />
-                        {subtitle}
-                    </p>}
+                    <p className="text-slate-400 text-[15px] font-semibold mb-1">{label}</p>
+                    <h3 className="text-3xl font-bold text-slate-900">{value}</h3>
                 </hgroup>
             </div>
         </div>
