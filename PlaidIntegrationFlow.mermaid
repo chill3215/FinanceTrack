@@ -1,0 +1,53 @@
+sequenceDiagram
+    participant User as Benutzer
+    participant Frontend as Deine App (Frontend)
+    participant Backend as Dein Server (Backend)
+    participant Plaid as Plaid API
+    participant Bank as Bank
+
+    Note over User,Bank: 1. INITIALISIERUNG
+    User->>Frontend: Klickt "Bank verbinden"
+    Frontend->>Backend: Fordert Link Token an
+    Backend->>Plaid: POST /link/token/create
+    Note right of Backend: client_id, secret,<br/>user info, products
+    Plaid-->>Backend: link_token
+    Backend-->>Frontend: link_token
+    
+    Note over User,Bank: 2. PLAID LINK ÖFFNEN
+    Frontend->>Frontend: Initialisiert Plaid Link<br/>mit link_token
+    Frontend->>User: Zeigt Plaid Link UI
+    
+    Note over User,Bank: 3. BANK-AUTHENTIFIZIERUNG
+    User->>Frontend: Wählt Bank aus
+    Frontend->>Bank: Leitet zur Bank-Login weiter
+    User->>Bank: Gibt Zugangsdaten ein
+    Bank-->>Frontend: Authentifizierung erfolgreich
+    Frontend-->>User: Zeigt Kontoauswahl
+    User->>Frontend: Wählt Konten aus
+    
+    Note over User,Bank: 4. TOKEN AUSTAUSCH
+    Frontend-->>Frontend: Erhält public_token
+    Frontend->>Backend: Sendet public_token
+    Backend->>Plaid: POST /item/public_token/exchange
+    Note right of Backend: public_token
+    Plaid-->>Backend: access_token + item_id
+    Backend->>Backend: Speichert access_token<br/>sicher in Datenbank
+    Backend-->>Frontend: Erfolgsbestätigung
+    
+    Note over User,Bank: 5. DATEN ABRUFEN
+    Frontend->>Backend: Fordert Kontodaten an
+    Backend->>Plaid: POST /accounts/get
+    Note right of Backend: access_token
+    Plaid->>Bank: Ruft Kontodaten ab
+    Bank-->>Plaid: Kontodaten
+    Plaid-->>Backend: Kontodaten (JSON)
+    Backend-->>Frontend: Kontodaten
+    Frontend-->>User: Zeigt Konten & Transaktionen
+    
+    Note over User,Bank: 6. REGELMÄSSIGE UPDATES
+    Backend->>Plaid: POST /transactions/sync
+    Note right of Backend: access_token
+    Plaid->>Bank: Synchronisiert neue Transaktionen
+    Bank-->>Plaid: Neue Transaktionen
+    Plaid-->>Backend: Aktualisierte Daten
+    Backend->>Backend: Speichert in Datenbank
