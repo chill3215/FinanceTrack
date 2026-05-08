@@ -70,21 +70,6 @@ Refer to [Plaid Integration Flow](./PlaidIntegrationFlow.mermaid) to understand 
 
 ---
 
-## Main Functionalities
-
-### Bank Account Integration
-Users can securely connect their bank accounts through Plaid. After successful authentication, the backend exchanges the public token for an access token and imports account and transaction data.
-
-### Expense Tracking
-The system stores transactions and allows users to monitor:
-- Income
-- Expenses
-- Categories
-- Account balances
-- Financial trends
-
----
-
 ## Installation
 
 ### Clone Repository
