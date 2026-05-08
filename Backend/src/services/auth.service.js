@@ -16,11 +16,11 @@ const register = async (email, password) => {
 const login = async (email, password)=>{
     const existingUser = await User.findOne({ email: email });
     if (!existingUser) {
-        throw new Error("Invalid credentials");
+        throw new Error("Email not found");
     }
     const passwordValid = await bcrypt.compare(password, existingUser.password);
     if (!passwordValid) {
-        throw new Error("Invalid credentials");
+        throw new Error("Incorrect password");
     }
 
     return signToken(existingUser._id);

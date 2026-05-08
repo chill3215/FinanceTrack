@@ -37,14 +37,19 @@ export default function Login({ onLogin }) {
                 body: JSON.stringify({ email, password }),
             });
 
-            const data = await res.json();
+            let data;
+            try {
+                data = await res.json();
+            } catch {
+                data = null;
+            }
 
-            if (res.status === 200) {
+            if (res.ok) {
                 localStorage.setItem("jwtToken", data.token);
                 onLogin();
                 navigate("/main");
             } else {
-                setError(data.message || "Login failed");
+                setError(data?.message || "Invalid email or password");
             }
         } catch (err) {
             setError("Server is not reachable");
