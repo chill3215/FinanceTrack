@@ -75,7 +75,7 @@ Refer to [Plaid Integration Flow](./PlaidIntegrationFlow.mermaid) to understand 
 ### Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/chill3215/FinanceTrack.git
 cd FinanceTrack
 ```
 
