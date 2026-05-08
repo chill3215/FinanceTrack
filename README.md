@@ -1,6 +1,6 @@
 # FinanceTrack [Live Demo](https://finance-track-phi.vercel.app/)
 
-FinanceTrack is a full-stack personal financial portfolio management application that helps users monitor their financial activities in one place. The app allows users to securely connect bank accounts, track transactions, manage budgets, and analyze spending behavior through an intuitive dashboard.
+FinanceTrack is a full-stack personal financial portfolio management application that helps users monitor their financial activities in one place. The app allows users to securely connect bank accounts, track transactions, manage budgets, and analyze spending behavior through an intuitive dashboard. The data is sourced from the Plaid Sandbox API as well as self-seeded sample data.
 
 ---
 
