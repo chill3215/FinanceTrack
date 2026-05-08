@@ -141,6 +141,9 @@ Create a `.env` file in the frontend directory:
 ```env
 VITE_BACKEND_URL=http://localhost:3000
 ```
+⚠️ Notice:
+Different frontend and backend URLs/ports can be used in your environment configuration. However, make sure to adjust the backend CORS settings to match the correct frontend origin to avoid cross-origin request issues.
+
 ---
 
 ## Future Improvements
