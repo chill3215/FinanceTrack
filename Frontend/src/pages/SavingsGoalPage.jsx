@@ -188,16 +188,12 @@ export default function SavingsGoalPage({ refreshKey }) {
   );
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 font-sans">
+    <div className="min-h-screen bg-[#f8fafc] space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 font-sans text-slate-90">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Savings Goals</h1>
           <p className="text-slate-500 font-medium">Plan your future and track your progress in real-time.</p>
-        </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-2xl border border-slate-200 shadow-sm text-xs font-bold text-slate-500 uppercase tracking-widest">
-            <Sparkles size={14} className="text-amber-500" />
-            Financial Planning
         </div>
       </div>
 
